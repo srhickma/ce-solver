@@ -1,0 +1,56 @@
+apply plugin: 'idea'
+
+allprojects {
+    version = "0.1.0"
+
+    buildDir = new File(rootProject.projectDir, ".gradleBuild/" + project.name)
+}
+
+subprojects {
+    task alldeps(type: DependencyReportTask) {}
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+    flatDir dirs: ['lib']
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources{
+            srcDir 'src/main/resources'
+        }
+    }
+    test {
+        java{
+            srcDir 'src/test/java'
+        }
+    }
+}
+
+dependencies {
+    compile ':log4j:1.2.14'
+    compile ':annotations'
+    compile ':guava:14.0.1'
+    compile ':reactfx:1.4.1'
+
+    testCompile ':junit:4.10'
+}
+
+mainClassName = 'com.konjex.lens.app.LensApplication'
+
+jar {
+    baseName 'ce-solver'
+
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+
